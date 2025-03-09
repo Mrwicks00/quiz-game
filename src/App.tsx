@@ -5,8 +5,10 @@ import Quizgame from "./Components/Quizgame";
 const App: React.FC = () => {
   return (
     <>
-      <h1>Quiz Game</h1>
-      <Quizgame />
+      <div className="Quizbag">
+        <h1 className="appquiz">🍭 Quiz Game</h1>
+        <Quizgame />
+      </div>
     </>
   );
 };

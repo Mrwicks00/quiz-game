@@ -1,65 +1,52 @@
-import { useState } from "react";
-import { IQuestionState, questions } from "./QuizQuestions";
+import { questions } from "./QuizQuestions";
+import { useQuiz } from "../hooks/useQuiz";
 
 const Quizgame = () => {
-  const [quizState, setQuizState] = useState<IQuestionState>({
-    isAnswered: false,
-    currentQuestion: 0,
-    isCorrect: null,
-    selectedAnswer: null,
-    score: 0,
-    isQuizzOver: false,
-  });
-
-  const manageAnswer = (selectedAnswerIndex: number) => {
-    if (quizState.isAnswered) return;
-    const isAnswerCorrect =
-      selectedAnswerIndex === questions[quizState.currentQuestion].answer;
-    setQuizState((prevQuizState) => ({
-      ...prevQuizState,
-      isAnswered: true,
-      isCorrect: isAnswerCorrect,
-      selectedAnswer: selectedAnswerIndex,
-      score: isAnswerCorrect ? prevQuizState.score + 1 : prevQuizState.score,
-    }));
-    setTimeout(() => {
-      if (quizState.currentQuestion + 1 < questions.length) {
-        setQuizState((prevQuizState) => ({
-          ...prevQuizState,
-          currentQuestion: prevQuizState.currentQuestion + 1,
-          selectedAnswer: null,
-          isCorrect: null,
-          isAnswered: false,
-        }));
-      } else {
-        setQuizState((prevQuizState) => ({
-          ...prevQuizState,
-          isQuizzOver: true,
-        }));
-      }
-    }, 2000);
-  };
-
+  const { quizState, manageAnswer } = useQuiz();
   return (
     <>
-      <h3>Please wait 2 seconds for the next question 🐦</h3>
       {!quizState.isQuizzOver ? (
         <div>
-          <h2>{questions[quizState.currentQuestion].Questions}</h2>
+          <h3 className="heading">You’re purr-fectly ready for this! 🐱💕</h3>
           <div>
-            {questions[quizState.currentQuestion].answers?.map(
-              (answer, index) => (
-                <button key={index} onClick={() => manageAnswer(index)}>
-                  {answer}
-                </button>
-              )
-            )}
+            <h2 className="question">
+              {questions[quizState.currentQuestion].Questions}
+            </h2>
+            <div>
+              {questions[quizState.currentQuestion].answers?.map(
+                (answer, index) => (
+                  <button
+                    className="displaybtn"
+                    id="btn"
+                    key={index}
+                    onClick={() => manageAnswer(index)}
+                    // style={{
+                    //   backgroundColor:
+                    //     quizState.selectedAnswer === index
+                    //       ? quizState.isCorrect
+                    //         ? "pink"
+                    //         : "lightcoral"
+                    //       : "white",
+                    //   color: "black",
+                    //   marginLeft: "10px",
+                    // }}
+                  >
+                    {answer}
+                  </button>
+                )
+              )}
+            </div>
           </div>
         </div>
       ) : (
-        <p>
-          Your score: {quizState.score} / {questions.length}
-        </p>
+        <div>
+          <p className="score">
+            Your score: {quizState.score} / {questions.length}
+          </p>
+          <p style={{ color: "white", fontSize: "19px" }}>
+            You did so well, don't let them tell you otherwise
+          </p>
+        </div>
       )}
     </>
   );
