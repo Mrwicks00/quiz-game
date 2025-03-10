@@ -47,5 +47,16 @@ export const useQuiz = () => {
     }, 900);
   };
 
-  return { quizState, manageAnswer };
+  const restartGame = () => {
+    setQuizState({
+      isAnswered: false,
+      currentQuestion: 0,
+      isCorrect: null,
+      selectedAnswer: null,
+      score: 0,
+      isQuizzOver: false,
+    });
+  };
+
+  return { quizState, manageAnswer, restartGame };
 };
